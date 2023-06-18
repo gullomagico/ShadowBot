@@ -53,27 +53,27 @@ module.exports = {
                 {
                     name: 'Gruppo 1',
                     value: formatGroupSignUps(groups[0]),
-                    inline: true,
+                    inline: false,
                 },
                 {
                     name: 'Gruppo 2',
                     value: formatGroupSignUps(groups[1]),
-                    inline: true,
+                    inline: false,
                 },
                 {
                     name: 'Gruppo 3',
                     value: formatGroupSignUps(groups[2]),
-                    inline: true,
+                    inline: false,
                 },
                 {
                     name: 'Gruppo 4',
                     value: formatGroupSignUps(groups[3]),
-                    inline: true,
+                    inline: false,
                 },
                 {
                     name: 'Gruppo 5',
                     value: formatGroupSignUps(groups[4]),
-                    inline: true,
+                    inline: false,
                 }
             )
             .setTimestamp()
