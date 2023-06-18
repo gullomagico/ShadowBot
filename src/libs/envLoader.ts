@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import * as yaml from 'js-yaml';
-import { EnvSchema } from '../env';
+import { EnvSchema } from '../types/env';
 
 const state = {
     started: false,

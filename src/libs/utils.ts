@@ -1,4 +1,5 @@
 import { ChannelType, Collection, VoiceState } from 'discord.js';
+import { GetSingleEventResponse, SignUpsItem } from '../types/raidHelper';
 
 export const generatedVoiceChannels = [
     '🔮 Dalaran 🔮',
@@ -50,6 +51,7 @@ export const fetchDataPlayer = async (player: string) => {
 
     return parsed;
 };
+
 export const fetchPlayerItems = async (items: string[]) => {
     const ret: number[] = [];
     await Promise.all(items.map(async e => {
@@ -69,6 +71,15 @@ export const fetchPlayerItems = async (items: string[]) => {
         }
     }));
     return ret;
+};
+
+export const fetchRaidHelperEvent = async (eventId: string) => {
+    const res = await fetch(
+        `https://raid-helper.dev/api/v2/events/${eventId}`
+    );
+
+    const parsed: GetSingleEventResponse = await res.json();
+    return parsed;
 };
 
 const getRandomChannelName = (channels: Collection<any, any>) => {
@@ -108,5 +119,19 @@ export const memberLeft = async (oldstate: VoiceState) => {
     if (oldstate.channel?.members.size == 0 && generatedVoiceChannels.includes(oldstate.channel.name)) {
         if (oldstate.channel) {await oldstate.channel.delete();}
     }
+
+};
+
+export const formatGroupSignUps = (group: SignUpsItem[][]) => {
+
+    const formattedGroup = [] as string[];
+
+    group.flat().forEach(item => {
+        formattedGroup.push(`${item.roleName} - ${item.className} - ${item.name}`);
+    });
+
+    for (let i = formattedGroup.length; i < 5; i++) { formattedGroup.push('[ vuoto ]'); }
+
+    return formattedGroup.join('\n');
 
 };
