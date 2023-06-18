@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node build/server.js",
-    "start:nobuild": "node build/server.js"
+    "start:nobuild": "node build/server.js",
+    "register:commands": "tsc && node build/scripts/registerCommands.js"
   },
   "author": "GulloMagico",
   "license": "ISC",
