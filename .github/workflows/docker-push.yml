@@ -1,0 +1,52 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t shadowrebot-image .
+
+      - name: Save Docker image as a tar file
+        run: docker save -o shadowrebot-image.tar shadowrebot-image
+
+      - name: Copy image to server using SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: ./shadowrebot-image.tar
+          target: /tmp/shadowrebot-image.tar
+
+      - name: Import Docker image on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker load -i /tmp/shadowrebot-image.tar
+
+      - name: Update Docker container on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker stop shadowrebot || true
+            docker rm shadowrebot || true
+            docker run -d --name shadowrebot -p 80:80 shadowrebot-image
