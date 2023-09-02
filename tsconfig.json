@@ -5,7 +5,7 @@
         "rootDir": "src/",
         "outDir": "build/",
         "strict": true,
-        "moduleResolution": "node",
+        "moduleResolution": "NodeNext",
         "importHelpers": true,
         "experimentalDecorators": true,
         "esModuleInterop": true,
