@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: ./shadowrebot-image.tar
-          target: /tmp/shadowrebot-image.tar
+          target: /tmp
 
       - name: Import Docker image on server
         uses: appleboy/ssh-action@v1.0.0
@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker load -i /tmp/shadowrebot-image.tar
+            sudo docker load -i /tmp/shadowrebot-image.tar
 
       - name: Update Docker container on server
         uses: appleboy/ssh-action@v1.0.0
@@ -51,6 +51,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker stop shadowrebot || true
-            docker rm shadowrebot || true
-            docker run -d --name shadowrebot -p 80:80 shadowrebot-image
+            sudo docker stop shadowrebot || true
+            sudo docker rm shadowrebot || true
+            sudo docker run -d --name shadowrebot -p 80:80 shadowrebot-image
