@@ -11,10 +11,16 @@ const state = {
 type StringKeyEnvSchema = { [K in keyof EnvSchema]: string };
 const cache: Partial<StringKeyEnvSchema> = {};
 
+const loadRemoteKeys = () => {
+    if (!process.env.SECRETS) throw Error('missing envs');
+    const remoteEnvs = JSON.parse(process.env.SECRETS) as Partial<EnvSchema>;
+    for (const [key, value] of Object.entries(remoteEnvs)) {
+        cache[key as keyof EnvSchema] = value;
+    }
+};
+
 const loadKeys = () => {
     let fileName: string;
-
-    // add logic for cloud case
 
     if (process.env.TESTING) fileName = 'testing';
     else fileName = 'local';
@@ -27,7 +33,8 @@ const loadKeys = () => {
 const getEnv = <Key extends keyof EnvSchema>(...listKeys: [...Key[]]) => {
     if (!state.started) {
         state.started = true;
-        loadKeys();
+        if (process.env.REMOTE) loadRemoteKeys();
+        else loadKeys();
         state.completed = true;
     }
 
@@ -38,7 +45,7 @@ const getEnv = <Key extends keyof EnvSchema>(...listKeys: [...Key[]]) => {
         if (
             typeof cache[key] === 'string' &&
             (cache[key] as string).trim() == ''
-        ) {throw Error(`env key: ${key} is empty`);}
+        ) { throw Error(`env key: ${key} is empty`); }
         values[key] = cache[key];
     }
 
