@@ -18,7 +18,7 @@ jobs:
         env:
           REMOTE: 1
           SECRETS: ${{ secrets.SECRETS }}
-        run: docker build -t shadowrebot-image -f ./Dockerfile.deploy .
+        run: docker build --build-arg REMOTE --build-arg SECRETS -t shadowrebot-image -f ./Dockerfile.deploy .
 
       - name: Save Docker image as a tar file
         run: docker save -o shadowrebot-image.tar shadowrebot-image
