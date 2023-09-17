@@ -1,5 +1,5 @@
 import { ChannelType, Collection, VoiceState } from 'discord.js';
-import { GetSingleEventResponse, SignUpsItem } from '../types/raidHelper';
+import { GetSingleEventResponse, SignUpsItem } from '../types/raidHelper.js';
 
 export const generatedVoiceChannels = [
     '🔮 Dalaran 🔮',
@@ -67,7 +67,7 @@ export const fetchPlayerItems = async (items: string[]) => {
         const resu = result.match(reg);
         if (resu) {
             const r = parseInt(resu?.join(''));
-            if (r > 100)ret.push(r);
+            if (r > 100) ret.push(r);
         }
     }));
     return ret;
@@ -86,7 +86,7 @@ const getRandomChannelName = (channels: Collection<any, any>) => {
     const usedNames = channels
         .filter(e => e.isVoiceBased())
         .map(e => {
-            if (e.isVoiceBased()) {return e.name;}
+            if (e.isVoiceBased()) { return e.name; }
         });
     const remainingNames = generatedVoiceChannels.filter(e => !usedNames.includes(e));
     const rndIndex = Math.floor(Math.random() * 100) % remainingNames.length;
@@ -117,7 +117,7 @@ export const memberLeft = async (oldstate: VoiceState) => {
     console.log(`[${(new Date()).toString().slice(0, 33)}] ${oldstate.member?.displayName} left ${oldstate.channel?.name}`);
 
     if (oldstate.channel?.members.size == 0 && generatedVoiceChannels.includes(oldstate.channel.name)) {
-        if (oldstate.channel) {await oldstate.channel.delete();}
+        if (oldstate.channel) { await oldstate.channel.delete(); }
     }
 
 };

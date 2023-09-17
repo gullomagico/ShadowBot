@@ -1,5 +1,5 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { fetchDataPlayer, fetchPlayerItems } from '../libs/utils';
+import { fetchDataPlayer, fetchPlayerItems } from '../libs/utils.js';
 
 const spreadProfessions = (professions: any) => {
     let out = '';

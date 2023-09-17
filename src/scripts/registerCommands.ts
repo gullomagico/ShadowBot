@@ -1,9 +1,9 @@
 import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { getEnv } from '../libs/envLoader';
+import { getEnv } from '../libs/envLoader.js';
 
-const { CLIENT_ID, GUILD_ID, DISCORD_TOKEN } = getEnv('CLIENT_ID', 'GUILD_ID', 'DISCORD_TOKEN');
+const { CLIENT_ID, DISCORD_TOKEN } = getEnv('CLIENT_ID', 'GUILD_ID', 'DISCORD_TOKEN');
 const rest = new REST().setToken(DISCORD_TOKEN);
 
 const commands: string[] = [];

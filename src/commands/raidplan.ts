@@ -1,6 +1,6 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { fetchRaidHelperEvent, formatGroupSignUps } from '../libs/utils';
-import { SignUpsItem } from '../types/raidHelper';
+import { fetchRaidHelperEvent, formatGroupSignUps } from '../libs/utils.js';
+import { SignUpsItem } from '../types/raidHelper.js';
 
 export default {
     // The data needed to register slash commands to Discord.

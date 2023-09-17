@@ -1,4 +1,9 @@
-import BotClient from './BotClient';
+import BotClient from './BotClient.js';
 
 const discordClient = new BotClient();
-discordClient.init();
+
+const start = async () => {
+    await discordClient.init();
+};
+
+await start();

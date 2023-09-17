@@ -1,5 +1,5 @@
 import { Events, VoiceState } from 'discord.js';
-import { memberJoin, memberLeft } from '../libs/utils';
+import { memberJoin, memberLeft } from '../libs/utils.js';
 
 export default {
     name: Events.VoiceStateUpdate,

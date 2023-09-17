@@ -1,9 +1,11 @@
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import { getEnv } from './libs/envLoader';
+import { getEnv } from './libs/envLoader.js';
 
 const { DISCORD_TOKEN } = getEnv('DISCORD_TOKEN');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 class BotClient extends Client {
     commands: Collection<string, any>;
@@ -28,7 +30,7 @@ class BotClient extends Client {
 
         for (const file of eventFiles) {
             const filePath = path.join(eventsPath, file);
-            const event = (await import(filePath)).default.default;
+            const event = (await import(filePath)).default;
             if (event.once) {
                 this.once(event.name, (...args) => event.execute(...args));
             }
@@ -43,7 +45,7 @@ class BotClient extends Client {
 
         for (const file of commandFiles) {
             const filePath = path.join(commandsPath, file);
-            const command = (await import(filePath)).default.default;
+            const command = (await import(filePath)).default;
             // Set a new item in the Collection with the key as the command name and the value as the exported module
             if ('data' in command && 'execute' in command) {
                 this.commands.set(command.data.name, command);

@@ -11,6 +11,7 @@
   },
   "author": "GulloMagico",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "bufferutil": "^4.0.7",
     "discord.js": "^14.7.1",

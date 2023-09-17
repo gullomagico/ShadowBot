@@ -1,6 +1,6 @@
 import { ActivityType, Client, GatewayIntentBits } from 'discord.js';
-import { getEnv } from '../libs/envLoader';
-import { sleep } from '../libs/utils';
+import { getEnv } from '../libs/envLoader.js';
+import { sleep } from '../libs/utils.js';
 
 const { DISCORD_TOKEN } = getEnv('DISCORD_TOKEN');
 

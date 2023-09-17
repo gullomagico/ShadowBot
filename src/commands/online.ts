@@ -1,5 +1,5 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { fetchDataGuild } from '../libs/utils';
+import { fetchDataGuild } from '../libs/utils.js';
 
 export default {
     // The data needed to register slash commands to Discord.
