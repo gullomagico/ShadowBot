@@ -1,7 +1,7 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { fetchDataGuild } from '../libs/utils';
 
-module.exports = {
+export default {
     // The data needed to register slash commands to Discord.
     data: new SlashCommandBuilder()
         .setName('online')

@@ -1,6 +1,6 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder, Client, Collection } from 'discord.js';
 
-module.exports = {
+export default {
     // The data needed to register slash commands to Discord.
     data: new SlashCommandBuilder()
         .setName('help')
@@ -31,9 +31,9 @@ module.exports = {
             helpEmbed.setTitle(`Help for \`${name}\` command`);
             if (commands.has(name)) {
                 /**
-				 * @type {SlashCommandBuilder}
-				 * @description The command data
-				 */
+                 * @type {SlashCommandBuilder}
+                 * @description The command data
+                 */
                 const command = commands.get(name).data;
                 if (command.description) helpEmbed.setDescription(command.description + '\n\n**Parameters:**');
                 command.options.forEach((option: any) => {

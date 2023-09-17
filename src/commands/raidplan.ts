@@ -2,7 +2,7 @@ import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from '
 import { fetchRaidHelperEvent, formatGroupSignUps } from '../libs/utils';
 import { SignUpsItem } from '../types/raidHelper';
 
-module.exports = {
+export default {
     // The data needed to register slash commands to Discord.
     data: new SlashCommandBuilder()
         .setName('raidplan')
@@ -20,7 +20,7 @@ module.exports = {
 
         const raidId = interaction.options.getString('raid_id') as string;
         const eventData = await fetchRaidHelperEvent(raidId);
-        const groups = [ [[], []], [[]], [[]], [[]], [[]] ] as SignUpsItem[][][];
+        const groups = [[[], []], [[]], [[]], [[]], [[]]] as SignUpsItem[][][];
 
         // Create groups
         eventData.signUps.filter(e => e.className != 'Tentative').forEach(e => {

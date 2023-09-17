@@ -2,11 +2,11 @@
   "name": "shadowrebot",
   "private": true,
   "version": "1.0.0",
-  "main": "build/server.js",
+  "main": "build/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node build/server.js",
-    "start:nobuild": "node build/server.js",
+    "start": "tsc && node build/main.js",
+    "start:nobuild": "node build/main.js",
     "register:commands": "tsc && node build/scripts/registerCommands.js"
   },
   "author": "GulloMagico",

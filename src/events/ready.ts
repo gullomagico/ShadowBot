@@ -1,9 +1,9 @@
 import { Client, Events } from 'discord.js';
 
-module.exports = {
+export default {
     name: Events.ClientReady,
     once: true,
     execute(client: Client) {
-        if (client.user) {console.log(`Ready! Logged in as ${client.user.tag}`);}
+        if (client.user) { console.log(`Ready! Logged in as ${client.user.tag}`); }
     },
 };

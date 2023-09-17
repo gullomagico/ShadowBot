@@ -14,14 +14,14 @@ const spreadData = (arr: any[]) => {
     let out = '';
 
     arr.forEach(team => {
-        for (const key of Object.keys(team)) {out += `${key}: ${team[key]}\n`;}
+        for (const key of Object.keys(team)) { out += `${key}: ${team[key]}\n`; }
     });
     if (out == '') out = 'No data.';
 
     return out;
 };
 
-module.exports = {
+export default {
     // The data needed to register slash commands to Discord.
     data: new SlashCommandBuilder()
         .setName('who')
@@ -49,7 +49,7 @@ module.exports = {
         if (data.error) {
             await interaction.reply(data.error);
         }
-        else if (!data.name) {await interaction.reply('Nessun pg trovato.');}
+        else if (!data.name) { await interaction.reply('Nessun pg trovato.'); }
         else {
             const embed = new EmbedBuilder()
                 .setColor(0xff0505)
