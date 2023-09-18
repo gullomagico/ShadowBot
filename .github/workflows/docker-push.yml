@@ -53,4 +53,4 @@ jobs:
           script: |
             sudo docker stop shadowrebot || true
             sudo docker rm shadowrebot || true
-            sudo docker run -d --name shadowrebot -p 80:80 shadowrebot-image
+            sudo docker run -d --name shadowrebot -p 80:80 -p 3000:3000 shadowrebot-image
