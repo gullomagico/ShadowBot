@@ -1,11 +1,12 @@
-import { Client, Collection, Events, Interaction } from 'discord.js';
+import { Events, Interaction } from 'discord.js';
+import BotClient from '../BotClient.js';
 
 export default {
     name: Events.InteractionCreate,
     async execute(interaction: Interaction) {
         if (!interaction.isChatInputCommand()) return;
 
-        const interactionClient = <Client & { commands: Collection<any, any> }>interaction.client;
+        const interactionClient = <BotClient>interaction.client;
         const command = interactionClient.commands.get(interaction.commandName);
 
         if (!command) {

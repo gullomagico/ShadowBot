@@ -1,4 +1,4 @@
-import { ChannelType, Collection, VoiceState } from 'discord.js';
+import { Channel, ChannelType, Collection, VoiceState } from 'discord.js';
 import { GetSingleEventResponse, SignUpsItem } from '../types/raidHelper.js';
 
 export const generatedVoiceChannels = [
@@ -82,7 +82,7 @@ export const fetchRaidHelperEvent = async (eventId: string) => {
     return parsed;
 };
 
-const getRandomChannelName = (channels: Collection<any, any>) => {
+const getRandomChannelName = (channels: Collection<string, Channel>) => {
     const usedNames = channels
         .filter(e => e.isVoiceBased())
         .map(e => {

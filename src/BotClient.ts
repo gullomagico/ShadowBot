@@ -1,14 +1,19 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { ChatInputCommandInteraction, Client, Collection, GatewayIntentBits, SlashCommandBuilder } from 'discord.js';
 import { getEnv } from './libs/envLoader.js';
 
 const { DISCORD_TOKEN } = getEnv('DISCORD_TOKEN');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+type Command = {
+    data: SlashCommandBuilder,
+    execute: (interaction: ChatInputCommandInteraction) => Promise<void>,
+};
+
 class BotClient extends Client {
-    commands: Collection<string, any>;
+    commands: Collection<string, Command>;
 
     constructor() {
         super({
