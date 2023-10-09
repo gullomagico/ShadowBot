@@ -37,20 +37,20 @@ export default {
 
     async execute(interaction: ChatInputCommandInteraction) {
 
-        let name = interaction.options.getString('nome') as any;
-        name = name[0].toUpperCase() + name.slice(1);
+        const input = interaction.options.getString('nome') as string;
+        const name = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
         const data = await fetchDataPlayer(name);
-        const items = data.equipment.map((e: any) => e.item);
-        const playerItems = await fetchPlayerItems(items);
-        const sum = playerItems.reduce((a, b) => a + b, 0);
-        const avg = (sum / playerItems.length) || 0;
-        console.log(playerItems);
 
         if (data.error) {
             await interaction.reply(data.error);
-        }
-        else if (!data.name) { await interaction.reply('Nessun pg trovato.'); }
-        else {
+        } else if (!data.name) {
+            await interaction.reply('Nessun pg trovato.');
+        } else {
+            const items = data.equipment.map((e: any) => e.item);
+            const playerItems = await fetchPlayerItems(items);
+            const sum = playerItems.reduce((a, b) => a + b, 0);
+            const avg = (sum / playerItems.length) || 0;
+
             const embed = new EmbedBuilder()
                 .setColor(0xff0505)
                 .setURL(`http://armory.warmane.com/character/${data.name}/Lordaeron/summary`)

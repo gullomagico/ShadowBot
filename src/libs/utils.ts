@@ -107,8 +107,7 @@ const createVocalChannel = async (newState: VoiceState) => {
 export const memberJoin = async (newState: VoiceState) => {
     if (newState.channel?.name.match(/^\u2795/g)) {
         await createVocalChannel(newState);
-    }
-    else {
+    } else {
         console.log(`[${(new Date()).toString().slice(0, 33)}] ${newState.member?.displayName} joins ${newState.channel?.name}`);
     }
 };
