@@ -1,5 +1,6 @@
 import { Channel, ChannelType, Collection, VoiceState } from 'discord.js';
 import { GetSingleEventResponse, SignUpsItem } from '../types/raidHelper.js';
+import * as cheerio from 'cheerio';
 
 export const generatedVoiceChannels = [
     '🔮 Dalaran 🔮',
@@ -27,6 +28,8 @@ export const generatedVoiceChannels = [
     '🔸 Grom\'arsh Crash-Site 🔸',
     '🔸 Camp Tunka\'lo 🔸',
 ];
+
+export const itemNames = ['Head', 'Neck', 'Shoulders', 'Cloak', 'Chest', 'Shirt', 'Tabard', 'Bracer', 'Gloves', 'Belt', 'Legs', 'Boots', 'Ring #1', 'Ring #2', 'Trinket #1', 'Trinket #2', 'Main-hand', 'Off-hand', 'Ranged'];
 
 export const sleep = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -132,5 +135,53 @@ export const formatGroupSignUps = (group: SignUpsItem[][]) => {
     for (let i = formattedGroup.length; i < 5; i++) { formattedGroup.push('[ vuoto ]'); }
 
     return formattedGroup.join('\n');
+
+};
+
+function getParams(params: string) {
+    const paramsSplitter = params.split('&');
+    const paramsMap = {} as { [key: string]: string };
+    paramsSplitter.forEach((p) => {
+        const v = p.split('=');
+        paramsMap[v[0]] = decodeURIComponent(v[1]);
+    });
+    return paramsMap;
+}
+
+export const getGemsData = async (name: string) => {
+    let amount;
+    const itemIDs = [] as any[];
+    const actualItems = [] as any[];
+
+    const res = await fetch(
+        `http://armory.warmane.com/character/${name}/Lordaeron/`
+    );
+    if (res.status != 200) return false;
+
+    const body = await res.text();
+    const $ = cheerio.load(body);
+
+    $('.item-model a').each((i: number, e: cheerio.Element) => {
+        const rel = e.attribs.rel;
+        if (!rel) return;
+
+        const params = getParams(rel);
+        if (params['gems']) {
+            amount = params['gems'].split(':').filter(x => x != '0').length;
+        } else {
+            amount = 0;
+        }
+
+        actualItems.push({
+            'itemID': Number(params['item']),
+            'gems': amount,
+            'type': itemNames[i],
+        });
+
+    });
+
+    actualItems.forEach((item: any) => {
+        console.log(item);
+    });
 
 };

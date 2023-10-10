@@ -13,6 +13,7 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "removeComments": true,
+        "skipLibCheck": true,
         "typeRoots": [
             "../../node_modules/@types"
         ]

@@ -77,7 +77,7 @@ export default {
                 }
             )
             .setTimestamp()
-            .setFooter({ text: 'ShadowRebirth', iconURL: 'https://cdn.discordapp.com/avatars/957769293158830100/27d944ced04385c196bc99310d2e9a35.png' });
+            .setFooter({ text: 'La Rinascita Oscura', iconURL: 'https://cdn.discordapp.com/app-icons/957769293158830100/f4357a78b9287a19b03e8df9773c2530.png' });
 
 
         await interaction.reply({ embeds: [embed] });

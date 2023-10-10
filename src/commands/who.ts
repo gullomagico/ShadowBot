@@ -1,5 +1,5 @@
 import { EmbedBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { fetchDataPlayer, fetchPlayerItems } from '../libs/utils.js';
+import { fetchDataPlayer, fetchPlayerItems, getGemsData } from '../libs/utils.js';
 
 const spreadProfessions = (professions: any) => {
     let out = '';
@@ -41,30 +41,29 @@ export default {
         const name = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
         const data = await fetchDataPlayer(name);
 
-        if (data.error) {
-            await interaction.reply(data.error);
-        } else if (!data.name) {
-            await interaction.reply('Nessun pg trovato.');
-        } else {
-            const items = data.equipment.map((e: any) => e.item);
-            const playerItems = await fetchPlayerItems(items);
-            const sum = playerItems.reduce((a, b) => a + b, 0);
-            const avg = (sum / playerItems.length) || 0;
+        if (data.error) { await interaction.reply(data.error); }
+        if (!data.name) { await interaction.reply('Nessun pg trovato.'); }
 
-            const embed = new EmbedBuilder()
-                .setColor(0xff0505)
-                .setURL(`http://armory.warmane.com/character/${data.name}/Lordaeron/summary`)
-                .setTitle(data.name)
-                .setTimestamp()
-                .setFooter({ text: 'ShadowRebirth', iconURL: 'https://cdn.discordapp.com/avatars/957769293158830100/27d944ced04385c196bc99310d2e9a35.png' })
-                .addFields(
-                    { name: 'Info', value: `Nome: ${data.name}\n` + `Online: ${data.online}\n` + `Level: ${data.level}\n` + `Razza: ${data.race}\n` + `Classe: ${data.class}\n` + `Gilda: ${data.guild}\n` + `Uccisioni PVP: ${data.honorablekills}\n` + `Punti Achivement: ${data.achievementpoints}\n` },
-                    { name: 'Professioni', value: spreadProfessions(data.professions) },
-                    { name: 'Teams PVP', value: spreadData(data.pvpteams) },
-                    { name: 'PVE', value: `Items: ${playerItems}\nAverage Item Level: ${avg}\n` }
-                );
+        const gemsData = getGemsData(name);
 
-            await interaction.reply({ embeds: [embed] });
-        }
+        const items = data.equipment.map((e: any) => e.item);
+        const playerItems = await fetchPlayerItems(items);
+        const sum = playerItems.reduce((a, b) => a + b, 0);
+        const avg = (sum / playerItems.length) || 0;
+
+        const embed = new EmbedBuilder()
+            .setColor(0xff0505)
+            .setURL(`http://armory.warmane.com/character/${data.name}/Lordaeron/summary`)
+            .setTitle(data.name)
+            .setTimestamp()
+            .setFooter({ text: 'La Rinascita Oscura', iconURL: 'https://cdn.discordapp.com/app-icons/957769293158830100/f4357a78b9287a19b03e8df9773c2530.png' })
+            .addFields(
+                { name: 'Info', value: `Nome: ${data.name}\n` + `Online: ${data.online}\n` + `Level: ${data.level}\n` + `Razza: ${data.race}\n` + `Classe: ${data.class}\n` + `Gilda: ${data.guild}\n` + `Uccisioni PVP: ${data.honorablekills}\n` + `Punti Achivement: ${data.achievementpoints}\n` },
+                { name: 'Professioni', value: spreadProfessions(data.professions) },
+                { name: 'Teams PVP', value: spreadData(data.pvpteams) },
+                { name: 'PVE', value: `Items: ${playerItems}\nAverage Item Level: ${avg}\n` }
+            );
+
+        // await interaction.reply({ embeds: [embed] });
     },
 };
