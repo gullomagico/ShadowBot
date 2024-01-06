@@ -1,6 +1,11 @@
 node_modules
 build
 
-.vscode
-
 env.*.yml
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
