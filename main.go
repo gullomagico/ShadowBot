@@ -5,41 +5,33 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/charmbracelet/log"
 )
 
-type LogLevelType struct {
-    level log.Level
-}
-
-// Implement the Set method for LogLevelType
-func (l *LogLevelType) Set(value string) error {
-    v, err := strconv.Atoi(value)
-    if err != nil {
-        return err
-    }
-    l.level = log.Level(v)
-    return nil
-}
-
-// Implement the String method for LogLevelType
-func (l *LogLevelType) String() string {
-    return strconv.Itoa(int(l.level))
-}
-
 var (
 	Token string
-	LogLevel LogLevelType
+	LogLevel string
 )
 
 func init() {
 	flag.StringVar(&Token, "t", "", "Bot Token")
-	flag.Var(&LogLevel, "l", "Log level")
+	flag.StringVar(&LogLevel, "log", "info", "Log Level of logger. Valid levels are: debug, info, warn, error, fatal")
 	flag.Parse()
+
+	validLogLevels := map[string]bool{
+		"debug": true,
+		"info":  true,
+		"warn":  true,
+		"error": true,
+		"fatal": true,
+	}
+
+	if !validLogLevels[LogLevel] {
+		log.Fatal("Invalid log level provided. Valid levels are: debug, info, warn, error, fatal")
+	}
 }
 
 func main() {
@@ -49,7 +41,12 @@ func main() {
 		return
 	}
 
-	log.SetLevel(LogLevel.level)
+	level, err := log.ParseLevel(LogLevel)
+	if err != nil {
+		log.Fatal("error parsing log level,", "err", err)
+		return
+	}
+	log.SetLevel(level)
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
