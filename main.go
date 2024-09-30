@@ -44,6 +44,7 @@ func init() {
 		return
 	}
 	log.SetLevel(level)
+	log.SetTimeFormat("2006-01-02 15:04:05.000")
 }
 
 func main() {
@@ -64,7 +65,6 @@ func main() {
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 
-	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
 		log.Error("error opening connection,", err)
@@ -77,78 +77,5 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
-	// Cleanly close down the Discord session.
 	dg.Close()
-}
-
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "Pong!")
-	}
-
-	if m.Content == "pong" {
-		s.ChannelMessageSend(m.ChannelID, "Ping!")
-	}
-}
-
-func voiceStateUpdate(s *discordgo.Session, m *discordgo.VoiceStateUpdate) {
-    user, err := s.User(m.UserID)
-    if err != nil {
-        log.Error("error getting user,", "err", err)
-        return
-    }
-
-    switch {
-    // Caso in cui l'utente si unisce per la prima volta a un canale vocale
-    case m.BeforeUpdate == nil && m.ChannelID != "":
-        log.Debug(fmt.Sprintf("%s has joined the channel %s", user.Username, m.ChannelID))
-        handleUserJoinedChannel(s, m.ChannelID, user)
-    
-    // Caso in cui l'utente lascia il canale (m.ChannelID è "")
-    case m.ChannelID == "" && m.BeforeUpdate != nil:
-        log.Debug(fmt.Sprintf("%s has left the channel %s", user.Username, m.BeforeUpdate.ChannelID))
-        handleUserLeftChannel(s, m.BeforeUpdate.ChannelID, user)
-    
-    // Caso in cui l'utente cambia canale vocale
-    case m.BeforeUpdate != nil && m.ChannelID != m.BeforeUpdate.ChannelID:
-        log.Debug(fmt.Sprintf("%s changed channel from %s to channel %s", user.Username, m.BeforeUpdate.ChannelID, m.ChannelID))
-        
-        // Prima gestiamo l'uscita dal vecchio canale
-        handleUserLeftChannel(s, m.BeforeUpdate.ChannelID, user)
-        
-        // Poi gestiamo l'entrata nel nuovo canale
-        handleUserJoinedChannel(s, m.ChannelID, user)
-
-    // Caso in cui l'utente non cambia canale, ma cambia stato mute/deaf
-    case m.ChannelID == m.BeforeUpdate.ChannelID:
-        if m.SelfMute != m.BeforeUpdate.SelfMute {
-            if m.SelfMute {
-                log.Debug(fmt.Sprintf("%s turned mute on", user.Username))
-            } else {
-                log.Debug(fmt.Sprintf("%s turned mute off", user.Username))
-            }
-        }
-        if m.SelfDeaf != m.BeforeUpdate.SelfDeaf {
-            if m.SelfDeaf {
-                log.Debug(fmt.Sprintf("%s turned deaf on", user.Username))
-            } else {
-                log.Debug(fmt.Sprintf("%s turned deaf off", user.Username))
-            }
-        }
-    }
-}
-
-func handleUserJoinedChannel(s *discordgo.Session, channelID string, user *discordgo.User) {
-    // log.Info(fmt.Sprintf("Handle user %s joining channel %s", user.Username, channelID))
-    // Aggiungi qui la logica
-}
-
-func handleUserLeftChannel(s *discordgo.Session, channelID string, user *discordgo.User) {
-    // log.Info(fmt.Sprintf("Handle user %s leaving channel %s", user.Username, channelID))
-    // Aggiungi qui la logica
 }
