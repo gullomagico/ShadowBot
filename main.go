@@ -18,21 +18,21 @@ var (
 )
 
 func init() {
-	flag.StringVar(&Token, "t", "", "Bot Token")
-	flag.StringVar(&LogLevel, "log", "info", "Log Level of logger. Valid levels are: debug, info, warn, error, fatal")
+	tokenCLI := flag.String("t", "", "Discord bot token")
+	logLevelCLI := flag.String("log", "", "Log level (debug, info, warn, error, fatal). Default: info")
 	flag.Parse()
 
-	utils.InitLogger(LogLevel)
+	Token = utils.GetConfig(*tokenCLI, "DISCORD_TOKEN", "")
+	LogLevel = utils.GetConfig(*logLevelCLI, "LOG_LEVEL", "info")
 
 	if Token == "" {
-		log.Fatal("No token provided. Please run with param \"-t <bot token>\"")
-		return
+		log.Fatal("Discord token not provided. Use CLI (-t), environment variable (DISCORD_TOKEN), or .env file.")
 	}
 
+	utils.InitLogger(LogLevel)
 }
 
 func main() {
-
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
 		log.Fatal("error creating Discord session,", "err", err)
@@ -43,8 +43,8 @@ func main() {
 		log.Info(fmt.Sprintf("%s bot is ready", s.State.User))
 	})
 
-	dg.AddHandler(messageCreate)
-	dg.AddHandler(voiceStateUpdate)
+	dg.AddHandler(utils.MessageCreate)
+	dg.AddHandler(utils.VoiceStateUpdate)
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 

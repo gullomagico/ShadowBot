@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"os"
+
 	"github.com/charmbracelet/log"
 )
 
@@ -13,4 +15,14 @@ func InitLogger(logLevel string) {
 
 	log.SetLevel(level)
 	log.SetTimeFormat("2006-01-02 15:04:05.000")
+}
+
+func GetConfig(cliValue string, envVar string, defaultValue string) string {
+	if cliValue != "" {
+		return cliValue
+	}
+	if value := os.Getenv(envVar); value != "" {
+		return value
+	}
+	return defaultValue
 }
