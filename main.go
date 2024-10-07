@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"shadowbot/utils"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
@@ -12,7 +13,7 @@ import (
 )
 
 var (
-	Token string
+	Token    string
 	LogLevel string
 )
 
@@ -21,30 +22,13 @@ func init() {
 	flag.StringVar(&LogLevel, "log", "info", "Log Level of logger. Valid levels are: debug, info, warn, error, fatal")
 	flag.Parse()
 
+	utils.InitLogger(LogLevel)
+
 	if Token == "" {
 		log.Fatal("No token provided. Please run with param \"-t <bot token>\"")
 		return
 	}
 
-	validLogLevels := map[string]bool{
-		"debug": true,
-		"info":  true,
-		"warn":  true,
-		"error": true,
-		"fatal": true,
-	}
-
-	if !validLogLevels[LogLevel] {
-		log.Fatal("Invalid log level provided. Valid levels are: debug, info, warn, error, fatal")
-	}
-
-	level, err := log.ParseLevel(LogLevel)
-	if err != nil {
-		log.Fatal("error parsing log level,", "err", err)
-		return
-	}
-	log.SetLevel(level)
-	log.SetTimeFormat("2006-01-02 15:04:05.000")
 }
 
 func main() {
@@ -61,7 +45,6 @@ func main() {
 
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(voiceStateUpdate)
-
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 
