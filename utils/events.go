@@ -116,6 +116,12 @@ func VoiceStateUpdate(s *discordgo.Session, m *discordgo.VoiceStateUpdate) {
 	}
 }
 
+func InteractionCreate(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	if handler, ok := CommandHandlers[i.ApplicationCommandData().Name]; ok {
+		handler(s, i)
+	}
+}
+
 func handleUserJoinedChannel(s *discordgo.Session, channel *discordgo.Channel, user *discordgo.User) {
 	trigger, err := regexp.Match("^\u2795", []byte(channel.Name))
 	if err != nil {

@@ -54,12 +54,21 @@ func main() {
 		log.Error("error opening connection,", err)
 		return
 	}
+	defer dg.Close()
+
+	log.Info("Loading commands...")
+	registeredCommands := make([]*discordgo.ApplicationCommand, len(utils.Commands))
+	for i, v := range utils.Commands {
+		cmd, err := dg.ApplicationCommandCreate(dg.State.User.ID, "", v)
+		if err != nil {
+			log.Fatal("Cannot create '%v' command: %v", v.Name, err)
+		}
+		registeredCommands[i] = cmd
+	}
 
 	// Wait here until CTRL-C or other term signal is received.
 	log.Info("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
-
-	dg.Close()
 }
