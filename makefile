@@ -1,14 +1,13 @@
 BIN_NAME=shadowbot
 ENV_FILE=.env
 
+run-local:
+	-@echo "Loading environment from $(ENV_FILE)..."; \
+	env $$(cat $(ENV_FILE) | grep -v '^#' | xargs) go run .; \
+
 run:
-	@if [ -f $(ENV_FILE) ]; then \
-		echo "Loading environment from $(ENV_FILE)..."; \
-		env $$(cat $(ENV_FILE) | grep -v '^#' | xargs) go run . ; \
-	else \
-		echo "$(ENV_FILE) not found, running with system environment variables..."; \
-		- go run . ; \
-	fi
+	@echo "Running $(BIN_NAME)..."
+	./$(BIN_NAME)
 
 build:
 	@echo "Building $(BIN_NAME)..."

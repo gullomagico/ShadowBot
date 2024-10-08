@@ -40,11 +40,12 @@ func main() {
 	}
 
 	dg.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) {
-		log.Info(fmt.Sprintf("%s bot is ready", s.State.User))
+		log.Info(fmt.Sprintf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator))
 	})
 
 	dg.AddHandler(utils.MessageCreate)
 	dg.AddHandler(utils.VoiceStateUpdate)
+	dg.AddHandler(utils.InteractionCreate)
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates
 
