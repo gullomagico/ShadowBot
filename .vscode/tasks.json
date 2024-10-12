@@ -1,0 +1,47 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "make build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Run",
+			"type": "shell",
+			"command": "make run",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docker Build",
+			"type": "shell",
+			"command": "make docker-build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docker Run",
+			"type": "shell",
+			"command": "make docker-run",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docker Run local",
+			"type": "shell",
+			"command": "make docker-run-local",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docker Push",
+			"type": "shell",
+			"command": "make docker-push",
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Local",
+			"type": "shell",
+			"command": "make run-local",
+			"problemMatcher": []
+		}
+	]
+}
