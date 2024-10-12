@@ -2,8 +2,7 @@ BIN_NAME=shadowbot
 ENV_FILE=.env
 
 run-local:
-	-@echo "Loading environment from $(ENV_FILE)..."; \
-	env $$(cat $(ENV_FILE) | grep -v '^#' | xargs) go run .; \
+	-@go run . -env $(ENV_FILE) -log debug
 
 run:
 	@echo "Running $(BIN_NAME)..."

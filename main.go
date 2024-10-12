@@ -13,27 +13,26 @@ import (
 )
 
 var (
-	Token    string
+	EnvFile  string
 	LogLevel string
+
+	DiscordToken string
 )
 
 func init() {
-	tokenCLI := flag.String("t", "", "Discord bot token")
-	logLevelCLI := flag.String("log", "", "Log level (debug, info, warn, error, fatal). Default: info")
+	envFile := flag.String("env", "", "Path to env file")
+	LogLevel := flag.String("log", "", "Log level (debug, info, warn, error, fatal). Default: info")
 	flag.Parse()
 
-	Token = utils.GetConfig(*tokenCLI, "DISCORD_TOKEN", "")
-	LogLevel = utils.GetConfig(*logLevelCLI, "LOG_LEVEL", "info")
+	utils.LoadSecrets(envFile)
 
-	if Token == "" {
-		log.Fatal("Discord token not provided. Use CLI (-t), environment variable (DISCORD_TOKEN), or .env file.")
-	}
+	DiscordToken = os.Getenv("DISCORD_TOKEN")
 
-	utils.InitLogger(LogLevel)
+	utils.InitLogger(*LogLevel)
 }
 
 func main() {
-	dg, err := discordgo.New("Bot " + Token)
+	dg, err := discordgo.New("Bot " + DiscordToken)
 	if err != nil {
 		log.Fatal("error creating Discord session,", "err", err)
 		return
