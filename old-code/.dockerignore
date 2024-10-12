@@ -1,9 +1,0 @@
-!env.local.yml
-node_modules
-.env
-coverage
-env.*.yml
-build
-!env.testing.yml
-!env.local.yml
-.vscode/launch.json
