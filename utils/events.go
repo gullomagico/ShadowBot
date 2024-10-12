@@ -130,7 +130,7 @@ func handleUserJoinedChannel(s *discordgo.Session, channel *discordgo.Channel, u
 	}
 
 	if trigger {
-		log.Debug("trigger for create channel")
+		log.Debug(fmt.Sprintf("User \"%s\" joined a trigger channel", user.Username))
 
 		var parentID string
 		if channel.ParentID != "" {
