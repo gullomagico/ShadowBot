@@ -7,3 +7,5 @@ FROM alpine:3.20
 WORKDIR /app
 COPY --from=builder /app/shadowbot .
 CMD ["./shadowbot"]
+
+LABEL org.opencontainers.image.description="This is a simple discord bot with some basic features."
